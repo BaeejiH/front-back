@@ -13,16 +13,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="cursor-pointer" onclick = "location.href ='/user/findById';">
-          <td>스티븐</td>
-          <td>xxxxx@gmail.com</td>
-          <td>2023-02-07</td>
-        </tr>
-
-        <tr class="cursor-pointer"  onclick = "location.href ='/user/findById';">
-          <td>제라드</td>
-          <td>yyyyy@gmail.com</td>
-          <td>2023-01-07</td>
+        <tr 
+          class="cursor-pointer" 
+          v-for="row in result" 
+          :key="row.no" 
+          v-on:click ="$event => location.href = '/user/findById'"
+        >
+          <td>{{ row.name }}</td>
+          <td>{{ row.email }}</td>
+          <td>{{ row.refDate }}</td>
         </tr>
       </tbody>
     </table>
@@ -30,8 +29,30 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-
+  name: 'ListView',
+  data(){
+    return {
+      result : []
+    }
+  },
+  created(){
+    this.getData()
+  },
+  methods :{
+    getData() {
+      axios
+      .post('http://localhost:8080/findAll')
+      .then((response)=>{
+        console.log(response)
+        this.result = response.data.result
+    })
+      .catch((error)=>{
+        console.log(error)
+    })
+    }
+  }
 }
 </script>
 

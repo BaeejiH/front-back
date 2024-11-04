@@ -24,6 +24,7 @@ public class UserServiceImp implements UserService {
     public ResultDTO findAll(){
         rDto = new ResultDTO();
         List<UserDto> resultList = uDao.findAll();
+        System.out.println("Retrieved user list: " + resultList); // 결과 로깅
         if(resultList != null){
             rDto.setState(true);
             rDto.setResult(resultList);
@@ -35,14 +36,43 @@ public class UserServiceImp implements UserService {
     }
     @Override
     public ResultDTO editById(UserDto uDto){
+        rDto = new ResultDTO();
+        int state = uDao.editById((uDto));
+        if(state == 1){
+            rDto.setState(true);
+            rDto.setMessage("사용자 수정이 성공하였습니다");
+        } else {
+            rDto.setState(false);
+            rDto.setMessage("사용자 수정이 실패하였습니다");
+        }
         return rDto;
     }
     @Override
     public ResultDTO delete(int no){
+        rDto = new ResultDTO();
+        int state = uDao.delete(no);
+        if(state == 1){
+            rDto.setState(true);
+            rDto.setMessage("사용자 삭제가 성공하였습니다");
+        }else {
+            rDto.setState(false);
+            rDto.setMessage("사용자 삭제가 실패하였습니다");
+        }
         return rDto;
     }
     @Override
     public ResultDTO save(UserDto uDto){
+
+        rDto = new ResultDTO();
+        int state = uDao.save(uDto);
+        System.out.println("Received UserDto: " + uDto);
+        if(state == 1){
+            rDto.setState(true);
+            rDto.setMessage("사용자 생성이 성공하였습니다");
+        }else {
+            rDto.setState(false);
+            rDto.setMessage("사용자 생성이 실패하였습니다");
+        }
         return rDto;
     }
 

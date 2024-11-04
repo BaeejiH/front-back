@@ -1,15 +1,19 @@
 package com.folder.app.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.folder.app.dto.ResultDTO;
+import com.folder.app.dto.UserDto;
 import com.folder.app.service.UserService;
 
 
@@ -42,17 +46,25 @@ public class DataController {
     }
     
     @PostMapping("/editById")
-    public ResultDTO editById() {
-        return null;
+    public ResultDTO editById(@RequestBody UserDto uDto) { // @RequestBody 데이터가 전달되는지 확인하기 위해, uDto 데이터 전달 정상적.
+        System.out.println(uDto);
+        return uService.editById(uDto);
     }
     
     @DeleteMapping("/delete")
-    public  ResultDTO delete(){
-        return null;
+    public  ResultDTO delete(@RequestParam("no") int no){
+        return uService.delete(no);
     }
 
-    @PutMapping("/save")
-    public ResultDTO save() {
-        return null;
+  @PutMapping("/save")
+    public ResponseEntity<ResultDTO> save(@RequestBody UserDto uDto) {
+    try {
+        ResultDTO result = uService.save(uDto);
+        return ResponseEntity.ok(result); // 성공 시 200 응답
+    } catch (Exception e) {
+        // 예외 처리
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(new ResultDTO(false, "서버 오류: " + e.getMessage()));
     }
+}
 }

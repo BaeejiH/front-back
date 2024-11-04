@@ -9,4 +9,5 @@ public interface UserDao {
     public List<UserDto>findAll();
     public int editById(UserDto uDto);
     public int save(UserDto uDto);
+    public int delete(int no);
 }

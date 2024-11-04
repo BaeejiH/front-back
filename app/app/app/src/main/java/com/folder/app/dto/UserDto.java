@@ -10,7 +10,7 @@ public class UserDto {
     private String name;
     private String email;
     private String pwd;
-    private Boolean gender;
-    private Boolean del;
-    private LocalDateTime regDate;
+    private String gender;
+    private int del;    
+    private LocalDateTime refDate; // Dto와 데아터를 전송하는 객체의 이름 오류시 오류번호 500(Internal Server Error), 실wp DB 컬럼명하고 단어 오류.
 }

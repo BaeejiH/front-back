@@ -12,16 +12,17 @@ import com.folder.app.dto.UserDto;
 @Mapper
 public interface UserMapper {
 
-    // DB 연결 및 테이블 재수정 필요
-    @Select("select* from user3")
+    // 데이터 DB연결 성공
+    @Select("select * from Example")
     public List<UserDto> findAll();
 
-    @Update("update user3 set name = #{name},pwd = #{pwd}, gender=#{gender} where no = #{no}")
-    public int editById (UserDto uDto);
+    @Update("UPDATE Example SET name = #{name}, pwd = #{pwd}, gender = #{gender} WHERE no = #{no}")
+    public int editById(UserDto uDto);
 
-    @Update("update user3 set del = true where no = #{no}")
+    @Update("UPDATE Example SET del = 1 WHERE no = #{no}")
     public int delete(int no);
 
-    @Insert("insert into user3 (name,email,pwd,gender) value {#name},#{email},#{pwd},#{gender}")
+    // insert into Example (name,email,pwd,gender,del,refDate) VALUES ('가나다','가나다@gmail.com','111','M',0,'2023-01-01')
+    @Insert("INSERT INTO Example (name, email, pwd, gender, del, refDate) VALUES (#{name}, #{email}, #{pwd}, #{gender}, #{del}, #{refDate})")
     public int save (UserDto uDTO);
 }
