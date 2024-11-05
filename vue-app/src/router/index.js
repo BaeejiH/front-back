@@ -13,12 +13,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/ListView.vue')
   },
   {
-    path: '/user/findById',
+    path: '/user/findById/:name', // 주소처럼 인식해서 name의 데이터가 넘어감.
     name: 'SelectView',
     component: () => import(/* webpackChunkName: "about" */ '../views/SelectView.vue')
   },
   {
-    path: '/user/editById',
+    path: '/user/editById/:no',
     name: 'UpdateView',
     component: () => import(/* webpackChunkName: "about" */ '../views/UpdateView.vue')
   },

@@ -17,7 +17,7 @@
           class="cursor-pointer" 
           v-for="row in result" 
           :key="row.no" 
-          v-on:click ="$event => location.href = '/user/findById'"
+          v-on:click ="$event => href(row)"
         >
           <td>{{ row.name }}</td>
           <td>{{ row.email }}</td>
@@ -30,6 +30,7 @@
 
 <script>
 import axios from 'axios';
+import store from '@/store'
 export default {
   name: 'ListView',
   data(){
@@ -39,6 +40,7 @@ export default {
   },
   created(){
     this.getData()
+    console.log(store)
   },
   methods :{
     getData() {
@@ -51,6 +53,18 @@ export default {
       .catch((error)=>{
         console.log(error)
     })
+    },
+    href(row) {
+      console.log(row)
+      store.commit('setUser',row)
+      this.$router.push({name: 'SelectView', params: row}) 
+      // a태그 같은 역할  
+      // query : 데이터를 넘기는 역할, 단 href뒤에 데이터가 그대로 노출됨.
+
+      // router의 속성값을 이용해서 데이터를 전달하는 방법
+      // quert > http://localhost:8080/user/findById/?name=사용자&pwd=1
+      // params >http://localhost:8080/user/findById/사용자/1
+      // index.js > path: '/user/findById/:name/:pwd'
     }
   }
 }
