@@ -27,6 +27,17 @@ const routes = [
     name: 'CreateView',
     component: () => import(/* webpackChunkName: "about" */ '../views/CreateView.vue')
   },
+  {
+    path: '/Movie',
+    name: 'MovieList',
+    component: () => import(/* webpackChunkName: "about" */ '../views/MovieList.vue')
+  },
+
+  {
+    path: '/Movie/:movie_num',
+    name: 'DetailMovie',
+    component: () => import(/* webpackChunkName: "about" */ '../views/DetailMovie.vue')
+  },
 ]
 
 const router = createRouter({

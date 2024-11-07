@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.folder.app.dto.ResultDTO;
 import com.folder.app.dto.UserDto;
+import com.folder.app.service.MovieService;
 import com.folder.app.service.UserService;
 
 
@@ -26,6 +27,8 @@ public class DataController {
     
 
     @Autowired UserService uService;
+
+    @Autowired MovieService mService;
 
    
     @GetMapping("/")
@@ -54,8 +57,13 @@ public class DataController {
         return uService.delete(no);
     }
 
-  @PutMapping("/save")
-    public ResultDTO save(@RequestBody UserDto uDto) {
-      return uService.save(uDto);
-    }
+    @PutMapping("/save")
+        public ResultDTO save(@RequestBody UserDto uDto) {
+        return uService.save(uDto);
+        }
+
+    @GetMapping("/selectMovie")
+    public ResultDTO selectMovie(){
+        return mService.selectMovie();
+    }    
 }

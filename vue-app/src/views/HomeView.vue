@@ -1,11 +1,14 @@
 <template>
   <div class="home">
-    <router-link to="/user">사용자목록</router-link>
+    <div><router-link to="/user">사용자목록</router-link></div>
+    <hr>
+    <div><router-link to="/Movie">영화목록</router-link></div>
+    <hr>
     <button @click="getData">데이터 호출</button>
   </div>
 </template>
 
-<script>
+<script>  
 import axios from 'axios';
 
 //HomeView.vue:27   
