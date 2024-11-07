@@ -3,6 +3,7 @@
     <h1 class="display-1 text-center">사용자 목록</h1>
     <div class="btn-group">
       <router-link to="/user/save" class="btn btn-primary">사용자 추가</router-link>
+      <router-link to="/" class="btn btn-danger">메인화면으로돌아가기</router-link>
     </div>
     <table class="table table-hover mt-3">
       <thead class="table-dark">
