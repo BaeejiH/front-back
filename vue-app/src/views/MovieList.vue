@@ -54,9 +54,51 @@ export default {
             axios
                 .get('http://localhost:8080/selectMovie')
                 .then((response) => {
-                    console.log(response)
+                    console.log('aaaa',response)
                     this.result = response.data.result
+
+                    let resultTmp = {no: 0}
+                   console.log('aaaaaa',resultTmp)
+
+                   let pp = {resultTmp,...this.result} // ### 1.객체 스프레드 ###  2. map  3. filter
+                   console.log('pppppp',pp)
+
+
+                    this.result.unshift(resultTmp)
+                    console.log(this.result.length)
+
+                    // 장르가 Drama 일때 드라마로 변경
+                    // for(let i=0; i<this.result.length; i++){
+                    //     if(this.result[i].genre === 'Drama')
+                    //     this.result[i].genre ='드라마'
+                    // }
+                    
+                    // 첫 번째 러일
+                //     for(let i=0; i<this.result.length; i++){
+                //          console.log('yyyy', this.result[i].genre.indexOf('D')) 
+                //     if(this.result[i].genre.indexOf('D') === 0){
+                //         // console.log('zzzz', this.result[i].genre.str[0])
+
+                //         // 첫 번째 문자열이이 D일 경우 d로변경함.(replace!!)
+                //         this.result[i].genre =this.result[i].genre.replace('D','d');
+                //     }            
+                //  }
+
+                // 상영시간이 130분 이하면 xx 표시로 변경
+                // for(let i=0; i<this.result.length; i++){
+                //     if(this.result[i].runtime <=130){
+                //         this.result[i].runtime = '-'
+                //         const fResult = this.result.filter(movie => movie.runtime > 130);
+                //         this.result = fResult
+                //     }
+                // }
+
+
+
                 })
+
+
+
                 .catch((error) => {
                     console.log(error)
                 })
@@ -78,7 +120,7 @@ export default {
        
         tdes(row) {
             row.showFullDescription = !row.showFullDescription;
-        }
+        },
     }
 }
 
