@@ -66,7 +66,9 @@ export default {
       // quert > http://localhost:8080/user/findById/?name=사용자&pwd=1
       // params >http://localhost:8080/user/findById/사용자/1
       // index.js > path: '/user/findById/:name/:pwd'
-    }
+    },
+
+    
   }
 }
 </script>
