@@ -1,0 +1,204 @@
+ 
+// Student data 쿼리 
+// 쿼리 기본 연습
+ 
+ 
+ -- 총 학생 인원수  2000년생 1900년생
+
+SELECT COUNT(CASE WHEN birthday LIKE '19%' THEN 1 END) AS a,
+    	 COUNT(CASE WHEN birthday LIKE '20%' THEN 1 END) AS b,
+    	 COUNT(CASE WHEN gender ="남" then 1 END) AS M,
+    	 COUNT(CASE WHEN gender ="여" then 1 END) AS F
+  FROM student;
+
+
+SELECT COUNT(*)
+FROM student
+WHERE gender = '남'
+
+SELECT COUNT(*)
+FROM student
+WHERE gender = '여'
+
+-- 남자의 평균 나이 여자의 평균나이
+
+SELECT avg(age) AS 평균나이 ,gender AS 성별 
+FROM student
+GROUP BY gender
+
+-- 남자 나이별 인원수 
+SELECT age, gender
+FROM student
+WHERE gender ='남'
+GROUP BY gender
+
+SELECT age,count(gender)
+FROM student
+GROUP BY age, gender
+
+-- 나이별 남자 인원 수
+SELECT substring(age,1,1) AS 나이,COUNT(age) AS 인원,gender
+  FROM student
+ WHERE gender = '남'
+ GROUP 
+    BY substring(age,1,1)
+ ORDER 
+    BY age DESC
+
+-- 두번째가 기자로 시작하는 사람 추출
+
+SELECT *
+FROM student
+WHERE NAME LIKE '%기%'
+
+SELECT name
+FROM student
+WHERE SUBSTRING(NAME,2,1) = '기'
+
+SELECT *
+FROM student
+
+-- 이름 암호화
+-- GREATEST :인수들 중에 가장 큰 값을 반환
+-- char_lenth : 문자열의 문자개수 반환
+SELECT CONCAT( 
+              SUBSTRING(NAME, 1, 1), REPEAT('*', GREATEST(CHAR_LENGTH(NAME) - 2, 0)), RIGHT(NAME, 1)
+             ) AS 이름
+  FROM student;
+
+--마지막 문자열 추출
+SELECT RIGHT (NAME,1) xx
+  FROM student;
+
+-- 날짜를 문자형식으로 변경
+SELECT create_date, DATE_FORMAT(create_date, '%Y-%m')
+  FROM professor_pw_history
+ GROUP 
+	 BY  DATE_FORMAT(create_date, '%Y-%m')
+
+
+SELECT TO_CHAR(create_date, 'YYYYMMDD')
+  FROM professor_pw_history
+
+
+
+-- 20살 김태리 ,서기범
+-- 나래비
+SELECT GROUP_CONCAT(NAME) AS '20살인사람'
+  FROM student
+ WHERE age = 20;
+
+-- 20대학생 생일순으로 rank
+SELECT age,birthday, RANK() OVER (order by birthday) AS '20대중나이가 많은 순서'
+  FROM student
+  WHERE age LIKE '2%'
+  
+SELECT age,birthday, RANK() OVER (order by birthday desc) AS '20대 중나이가 적은 순서'
+  FROM student
+  WHERE age LIKE '2%'  
+  
+-- 연령대 상관없이 생년월일로 (동일인물 순서)
+
+SELECT birthday, DENSE_RANK() OVER (order by birthday DESC) AS '나이순서'
+  FROM student
+ 
+ -- 연령대로 짤라서 추출 (중복된것이 없으면)
+ 
+SELECT COUNT(CASE WHEN age LIKE '1%' THEN 1 END) AS '10대',
+	    COUNT(CASE WHEN age LIKE '2%' THEN 1 END) AS '20대',
+	    COUNT(CASE WHEN age LIKE '3%' THEN 1 END) AS '30대',
+	    COUNT(CASE WHEN age LIKE '4%' THEN 1 END) AS '40대',
+	    COUNT(CASE WHEN age LIKE '5%' THEN 1 END) AS '50대'	
+  FROM student
+
+SELECT *
+  FROM (  
+			SELECT substring(age,1,1) AS SUB_STR_AGE, COUNT(age) AS AGE_CNT
+			  FROM student  
+			 GROUP 
+			    BY substring(age,1,1)
+		  ) T
+;
+
+
+
+
+
+			SELECT substring(age,1,1) AS SUB_STR_AGE, COUNT(age) AS AGE_CNT
+			  FROM student  
+			 GROUP 
+			    BY substring(age,1,1)
+			  HAVING COUNT(AGE) > 1
+			    
+    
+-- 연령대 중복제거 카운팅
+
+SELECT t.sub_age AS Total_AGE,COUNT(t.sub_age) AS Total_CNT
+  FROM (
+			SELECT SUBSTRING(age,1,2)AS sub_age
+			  FROM student
+			 GROUP 
+			    BY SUBSTRING(age,1,2) 
+) AS t
+GROUP BY SUBSTRING(t.sub_age,1,1)
+;
+
+SELECT COUNT(DISTINCT SUBSTRING(age,1,2))AS sub_age , age
+			  FROM student
+			  GROUP BY SUBSTRING(age,1,2) 
+
+-- 연령대별 남자,여자 인원수
+SELECT SUBSTRING(age,1,1),COUNT(age),gender
+  FROM student
+  GROUP 
+     BY SUBSTRING(age,1,1), gender
+     
+     
+-- 연령대별 나이순서로 rank
+
+-- row_number
+
+
+SELECT SUBSTRING(age,1,2) AS AGE 
+     , RANK() OVER (PARTITION BY SUBSTRING(age,1, 1) ORDER BY age) AS AGE_RANK
+     , AVG(age) OVER (PARTITION BY SUBSTRING(age,1, 1) ORDER BY age) AS AGE_AVG
+     , SUM(age) OVER (PARTITION BY SUBSTRING(age,1, 1) ORDER BY age) AS AGE_SUM    
+  FROM student 
+  
+-- 연령대별 총합
+
+SELECT 
+    t.AGE_SUM, 
+    t.AGE_AVG
+FROM (
+    SELECT 
+        SUBSTRING(age, 1, 1) AS AGE_GROUP,
+        SUM(CASE 
+            WHEN age LIKE '1%' THEN 1 
+            WHEN age LIKE '2%' THEN 2 
+            WHEN age LIKE '3%' THEN 3 
+            WHEN age LIKE '4%' THEN 4 
+            WHEN age LIKE '5%' THEN 5 
+            ELSE 0 
+        END) AS AGE_SUM,
+        AVG(CASE 
+            WHEN age LIKE '1%' THEN 1 
+            WHEN age LIKE '2%' THEN 2 
+            WHEN age LIKE '3%' THEN 3 
+            WHEN age LIKE '4%' THEN 4 
+            WHEN age LIKE '5%' THEN 5 
+            ELSE 0 
+        END) AS AGE_AVG
+    FROM 
+        student
+) t;
+ -- GROUB BY 써야함......
+  
+
+
+  
+  
+  
+
+
+
